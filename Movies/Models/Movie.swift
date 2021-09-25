@@ -8,6 +8,10 @@
 struct Movie: Decodable {
     let title: String?
     let poster: String?
+    let rating_kinopoisk: String?
+    let year: Int?
+    let description: String?
+    let genres: [String]?
 }
 
 struct AllMoviesDescriptions: Decodable {

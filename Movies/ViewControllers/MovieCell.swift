@@ -11,7 +11,7 @@ class MovieCell: UICollectionViewCell {
     @IBOutlet var posterImage: UIImageView!
     
     @IBOutlet var ratingStackView: UIStackView!
-    
+
     @IBOutlet var ratingLabel: UILabel!
     @IBOutlet var titleLabel: UILabel!
     

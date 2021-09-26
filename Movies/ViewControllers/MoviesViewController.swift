@@ -5,18 +5,25 @@
 //  Created by Анатолий Миронов on 24.09.2021.
 //
 
+// You can use 1 token for only 10 free requests
+enum Token: String {
+    case tokenOne = "213beecca2250a48fb59960849426182"
+    case tokenTwo = "f9b1c2c02f9919bf405d41f2cd177bf9"
+    case tokenThree = "dcc9ee3f6e2b35a55462938d3514ac96"
+    case tokenFour = "2e8a7fe966acc49406bb2d32048ddcc0"
+}
+
 import UIKit
 
 class MoviesViewController: UICollectionViewController {
     
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
 
+    private let token = Token.tokenOne.rawValue
+    
     private var movies: [Movie] = []
-    
-    private let token = "fc2212f98d7bd2e7e8ef7e6aa70e482e"
-    
     private var url: String {
-        "https://api.kinopoisk.cloud/movies/all/page/9/token/\(token)"
+        "https://api.kinopoisk.cloud/movies/all/page/3/token/\(token)"
     }
     
     override func viewDidLoad() {

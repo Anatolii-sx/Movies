@@ -26,22 +26,18 @@ class DescriptionViewController: UIViewController {
         
         titleLabel.text = movie.title
         yearLabel.text = "Год:   \(movie.year ?? 0)"
-        
         ratingLabel.text = "Рейтинг:   \(movie.rating_kinopoisk ?? "")"
+        descriptionLabel.text = "Описание:   \(movie.description ?? "")"
         
         let genres = movie.genres ?? []
         genreLabel.text = "Жанр:   \(genres.joined(separator: ", "))"
-        
-        descriptionLabel.text = "Описание:   \(movie.description ?? "")"
     }
 }
 
 extension DescriptionViewController {
     func fetchImage() {
-        
         DispatchQueue.global().async {
             let https = "https:"
-            
             guard let url = URL(string: https + (self.movie.poster ?? "")) else { return }
             guard let imageData = try? Data(contentsOf: url) else { return }
             

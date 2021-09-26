@@ -22,10 +22,10 @@ class MoviesViewController: UICollectionViewController {
 
     private var movies: [Movie] = []
     
-    private let token = "ef8a6db59d96795f64bc1d073ac9e585"
+    private let token = "2e2dfc7ba4cbed65af5f330b790fb889"
     
     private var url: String {
-        "https://api.kinopoisk.cloud/movies/all/page/7/token/\(token)"
+        "https://api.kinopoisk.cloud/movies/all/page/9/token/\(token)"
     }
     
     override func viewDidLoad() {
@@ -56,7 +56,11 @@ class MoviesViewController: UICollectionViewController {
         DispatchQueue.main.async {
             cell.titleLabel.text = "\(self.movies[indexPath.item].title ?? "")"
             
-            cell.ratingLabel.text = "\(self.movies[indexPath.item].rating_kinopoisk ?? "")"
+            let rating = self.movies[indexPath.item].rating_kinopoisk ?? ""
+            let ratingDouble = Double(rating)
+            let ratingAround = String(format: "%.01f", ratingDouble ?? 0)
+            
+            cell.ratingLabel.text = ratingAround
         }
         
         DispatchQueue.global().async {
@@ -70,6 +74,7 @@ class MoviesViewController: UICollectionViewController {
                 self.activityIndicator.stopAnimating()
             }
         }
+        
         return cell
     }
 
@@ -79,6 +84,7 @@ class MoviesViewController: UICollectionViewController {
         guard let indexPath = collectionView.indexPathsForSelectedItems?.first?.item else { return }
         
         descriptionVC.movie = movies[indexPath]
+        descriptionVC.fetchImage()
     }
 }
 

@@ -7,15 +7,6 @@
 
 import UIKit
 
-class MovieCell: UICollectionViewCell {
-    @IBOutlet var posterImage: UIImageView!
-    
-    @IBOutlet weak var ratingStackView: UIStackView!
-    
-    @IBOutlet weak var ratingLabel: UILabel!
-    @IBOutlet var titleLabel: UILabel!
-}
-
 class MoviesViewController: UICollectionViewController {
     
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
@@ -40,47 +31,18 @@ class MoviesViewController: UICollectionViewController {
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "movieID", for: indexPath) as? MovieCell else { return UICollectionViewCell() }
         
-        cell.layer.cornerRadius = 12
-        cell.titleLabel.layer.cornerRadius = 12
-        cell.posterImage.layer.cornerRadius = 12
+        let movie = movies[indexPath.item]
+        cell.configure(movie: movie, cell: cell)
         
-        cell.ratingStackView.layer.cornerRadius = 5
-        
-        cell.layer.shadowRadius = 6
-        cell.layer.shadowOpacity = 0.2
-        cell.layer.shadowOffset = CGSize(width: -3, height: -3)
-        
-        DispatchQueue.main.async {
-            cell.titleLabel.text = "\(self.movies[indexPath.item].title ?? "")"
-            
-            let rating = self.movies[indexPath.item].rating_kinopoisk ?? ""
-            let ratingDouble = Double(rating)
-            let ratingAround = String(format: "%.01f", ratingDouble ?? 0)
-            
-            cell.ratingLabel.text = ratingAround
-        }
-        
-        DispatchQueue.global().async {
-            let https = "https:"
-            
-            guard let url = URL(string: https + (self.movies[indexPath.item].poster ?? "")) else { return }
-            guard let imageData = try? Data(contentsOf: url) else { return }
-            
-            DispatchQueue.main.async {
-                cell.posterImage.image = UIImage(data: imageData)
-                self.activityIndicator.stopAnimating()
-            }
-        }
+        self.activityIndicator.stopAnimating()
         
         return cell
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let descriptionVC = segue.destination as? DescriptionViewController else { return }
-        
         guard let indexPath = collectionView.indexPathsForSelectedItems?.first?.item else { return }
         
         descriptionVC.movie = movies[indexPath]
@@ -105,7 +67,6 @@ extension MoviesViewController {
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
                 }
-                
             } catch let error {
                 print(error.localizedDescription)
             }

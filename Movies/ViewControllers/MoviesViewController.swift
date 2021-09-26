@@ -22,7 +22,7 @@ class MoviesViewController: UICollectionViewController {
 
     private var movies: [Movie] = []
     
-    private let token = "2e2dfc7ba4cbed65af5f330b790fb889"
+    private let token = "fc2212f98d7bd2e7e8ef7e6aa70e482e"
     
     private var url: String {
         "https://api.kinopoisk.cloud/movies/all/page/9/token/\(token)"

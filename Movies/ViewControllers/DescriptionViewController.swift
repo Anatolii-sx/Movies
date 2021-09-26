@@ -22,6 +22,8 @@ class DescriptionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        posterImageView.layer.cornerRadius = 12
+        
         titleLabel.text = movie.title
         yearLabel.text = "Год:   \(movie.year ?? 0)"
         

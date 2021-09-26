@@ -18,12 +18,10 @@ import UIKit
 class MoviesViewController: UICollectionViewController {
     
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
-
-    private let token = Token.tokenOne.rawValue
     
     private var movies: [Movie] = []
     private var url: String {
-        "https://api.kinopoisk.cloud/movies/all/page/3/token/\(token)"
+        "https://api.kinopoisk.cloud/movies/all/page/3/token/\(Token.tokenOne.rawValue)"
     }
     
     override func viewDidLoad() {

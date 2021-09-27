@@ -17,13 +17,13 @@ class MovieCell: UICollectionViewCell {
     
     func configure(movie: Movie, cell: UICollectionViewCell) {
         
-        cell.layer.cornerRadius = 12
+        cell.layer.cornerRadius = 20
         cell.layer.shadowRadius = 6
         cell.layer.shadowOpacity = 0.2
-        cell.layer.shadowOffset = CGSize(width: -3, height: -3)
+        cell.layer.shadowOffset = CGSize(width: -2, height: -2)
         
-        titleLabel.layer.cornerRadius = 12
-        posterImage.layer.cornerRadius = 12
+        titleLabel.layer.cornerRadius = 20
+        posterImage.layer.cornerRadius = 20
         ratingStackView.layer.cornerRadius = 5
         
         DispatchQueue.main.async {

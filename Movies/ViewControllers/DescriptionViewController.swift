@@ -22,6 +22,8 @@ class DescriptionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        fetchImage()
+        
         posterImageView.layer.cornerRadius = 12
         
         titleLabel.text = movie.title
@@ -37,14 +39,11 @@ class DescriptionViewController: UIViewController {
 extension DescriptionViewController {
     func fetchImage() {
         DispatchQueue.global().async {
-            let https = "https:"
-            guard let url = URL(string: https + (self.movie.poster ?? "")) else { return }
+            guard let url = URL(string: "https:\(self.movie.poster ?? "")") else { return }
             guard let imageData = try? Data(contentsOf: url) else { return }
             
             DispatchQueue.main.async {
                 self.posterImageView.image = UIImage(data: imageData)
-                //self.activityIndicator.stopAnimating()
-                self.view.reloadInputViews()
             }
         }
     }

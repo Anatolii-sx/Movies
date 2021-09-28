@@ -24,15 +24,13 @@ class DescriptionViewController: UIViewController {
         
         fetchImage()
         
-        posterImageView.layer.cornerRadius = 12
-        
         titleLabel.text = movie.title
-        yearLabel.text = "Год:   \(movie.year ?? 0)"
-        ratingLabel.text = "Рейтинг:   \(movie.rating_kinopoisk ?? "")"
-        descriptionLabel.text = "Описание:   \(movie.description ?? "")"
+        yearLabel.text = "Год:  \(movie.year ?? 0)"
+        ratingLabel.text = "Рейтинг:  \(movie.ratingKinopoisk ?? "")"
+        descriptionLabel.text = "Описание:  \(movie.description ?? "")"
         
         let genres = movie.genres ?? []
-        genreLabel.text = "Жанр:   \(genres.joined(separator: ", "))"
+        genreLabel.text = "Жанр:  \(genres.joined(separator: ", "))"
     }
 }
 

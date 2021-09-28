@@ -5,13 +5,6 @@
 //  Created by Анатолий Миронов on 24.09.2021.
 //
 
-// You can use 1 token for only 10 free requests
-enum Token: String {
-    case tokenOne = "2e8a7fe966acc49406bb2d32048ddcc0"
-    case tokenTwo = "f9b1c2c02f9919bf405d41f2cd177bf9"
-    case tokenThree = "dcc9ee3f6e2b35a55462938d3514ac96"
-}
-
 import UIKit
 
 class MoviesViewController: UICollectionViewController {
@@ -19,9 +12,6 @@ class MoviesViewController: UICollectionViewController {
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
     
     private var movies: [Movie] = []
-    private var url: String {
-        "https://api.kinopoisk.cloud/movies/all/page/3/token/\(Token.tokenOne.rawValue)"
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,26 +45,15 @@ class MoviesViewController: UICollectionViewController {
 
 extension MoviesViewController {
     private func fetchData() {
-        guard let url = URL(string: self.url) else { return }
-        
-        URLSession.shared.dataTask(with: url) { data, _, error in
-            guard let data = data else {
-                print(error?.localizedDescription ?? "No error with taking data")
-                return
-            }
-            
-            do {
-                let allMoviesDescriptions = try JSONDecoder().decode(AllMoviesDescriptions.self, from: data)
+        NetworkManager.shared.fetchMovies(url: NetworkManager.shared.url) { result in
+            switch result {
+            case .success(let allMoviesDescriptions):
                 self.movies = allMoviesDescriptions.movies ?? []
-                
-                DispatchQueue.main.async {
-                    self.collectionView.reloadData()
-                }
-            } catch let error {
-                print(error.localizedDescription)
+                self.collectionView.reloadData()
+            case .failure(let error):
+                print(error)
             }
-            
-        }.resume()
+        }
     }
 }
 

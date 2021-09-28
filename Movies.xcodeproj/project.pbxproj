@@ -45,6 +45,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9C0EA2902703940700805C33 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				9C7AC76C27006E6700092542 /* MovieCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		9CF96DB726FE22D200EB1653 = {
 			isa = PBXGroup;
 			children = (
@@ -64,6 +72,7 @@
 		9CF96DC226FE22D200EB1653 /* Movies */ = {
 			isa = PBXGroup;
 			children = (
+				9C0EA2902703940700805C33 /* Views */,
 				9CF96DD726FE231100EB1653 /* ViewControllers */,
 				9CF96DD926FE233100EB1653 /* Models */,
 				9CF96DDA26FE234B00EB1653 /* Services */,
@@ -79,7 +88,6 @@
 			children = (
 				9CF96DC726FE22D200EB1653 /* MoviesViewController.swift */,
 				9CFA1C6626FFD90F00BAD7A4 /* DescriptionViewController.swift */,
-				9C7AC76C27006E6700092542 /* MovieCell.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";

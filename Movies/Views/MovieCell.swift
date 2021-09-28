@@ -28,15 +28,14 @@ class MovieCell: UICollectionViewCell {
         
         DispatchQueue.main.async {
             self.titleLabel.text = "\(movie.title ?? "")"
-            let rating = movie.rating_kinopoisk ?? ""
+            let rating = movie.ratingKinopoisk ?? ""
             let ratingDouble = Double(rating)
             let ratingAround = String(format: "%.01f", ratingDouble ?? 0)
             self.ratingLabel.text = ratingAround
         }
         
         DispatchQueue.global().async {
-            let https = "https:"
-            guard let url = URL(string: https + (movie.poster ?? "")) else { return }
+            guard let url = URL(string: "https:\(movie.poster ?? "")") else { return }
             guard let imageData = try? Data(contentsOf: url) else { return }
             DispatchQueue.main.async {
                 self.posterImage.image = UIImage(data: imageData)

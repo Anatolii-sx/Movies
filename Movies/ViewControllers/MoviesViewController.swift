@@ -11,13 +11,19 @@ class MoviesViewController: UICollectionViewController {
     
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
     
+    private let refreshControl = UIRefreshControl()
+    
     private var movies: [Movie] = []
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         activityIndicator.startAnimating()
         activityIndicator.hidesWhenStopped = true
-        fetchData()
+        
+        collectionView.refreshControl = refreshControl
+        setupRefreshControl()
+        downloadData()
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -43,23 +49,33 @@ class MoviesViewController: UICollectionViewController {
     }
 }
 
-extension MoviesViewController {
-    private func fetchData() {
-        NetworkManager.shared.fetchMovies(url: NetworkManager.shared.url) { result in
-            switch result {
-            case .success(let allMoviesDescriptions):
-                self.movies = allMoviesDescriptions.movies ?? []
-                self.collectionView.reloadData()
-            case .failure(let error):
-                print(error)
-            }
-        }
-    }
-}
+
 
 extension MoviesViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         CGSize(width: 150, height: 300)
+    }
+}
+
+extension MoviesViewController {
+    @objc private func downloadData() {
+            NetworkManager.shared.fetchMovies(url: NetworkManager.shared.url) { result in
+                switch result {
+                case .success(let allMoviesDescriptions):
+                    self.movies = allMoviesDescriptions.movies ?? []
+                    self.collectionView.reloadData()
+                    if self.refreshControl != nil {
+                        self.refreshControl.endRefreshing()
+                    }
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
+    
+    private func setupRefreshControl() {
+        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        refreshControl.addTarget(self, action: #selector(downloadData), for: .valueChanged)
     }
 }
 

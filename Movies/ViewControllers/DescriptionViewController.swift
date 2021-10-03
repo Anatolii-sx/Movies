@@ -6,10 +6,13 @@
 //
 
 import UIKit
+import SafariServices
 
 class DescriptionViewController: UIViewController {
 
     @IBOutlet var posterImageView: UIImageView!
+    
+    @IBOutlet weak var trailerButton: UIButton!
     
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var yearLabel: UILabel!
@@ -22,16 +25,17 @@ class DescriptionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        trailerButton.layer.cornerRadius = 12
+        
         let gestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(self.gestureFired))
         gestureRecognizer.direction = .right
         gestureRecognizer.numberOfTouchesRequired = 1
         view.addGestureRecognizer(gestureRecognizer)
         view.isUserInteractionEnabled = true
         
-        
         fetchImage()
         
-        titleLabel.text = movie.title
+        titleLabel.text = movie.title ?? ""
         yearLabel.text = "Год:  \(movie.year ?? 0)"
         ratingLabel.text = "Рейтинг:  \(movie.ratingKinopoisk ?? "")"
         descriptionLabel.text = "Описание:  \(movie.description ?? "")"
@@ -40,8 +44,33 @@ class DescriptionViewController: UIViewController {
         genreLabel.text = "Жанр:  \(genres.joined(separator: ", "))"
     }
     
+    @IBAction func trailerButtonTapped() {
+        guard let trailer = movie.trailer else {
+            showAlert(title: "Ошибка", message: "К сожалению, видео отсутствует 😔")
+            return
+        }
+        guard let trailerURL = URL(string: trailer) else { return }
+        
+        let safariViewController = SFSafariViewController(url: trailerURL)
+        present(safariViewController, animated: true)
+    }
+    
     @objc func gestureFired(sender: UISwipeGestureRecognizer) {
         navigationController?.popViewController(animated: true)
+    }
+    
+    private func showAlert(title: String, message: String) {
+        let alert = UIAlertController(
+            title: title,
+            message: message,
+            preferredStyle: .alert
+        )
+        
+        present(alert, animated: true)
+
+        let okButton = UIAlertAction(title: "OK", style: .default)
+        
+        alert.addAction(okButton)
     }
 }
 

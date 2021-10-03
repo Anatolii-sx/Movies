@@ -12,6 +12,7 @@ struct Movie: Decodable {
     let year: Int?
     let description: String?
     let genres: [String]?
+    let trailer: String?
 }
 
 struct AllMoviesDescriptions: Decodable {

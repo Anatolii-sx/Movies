@@ -15,7 +15,6 @@ class MoviesViewController: UICollectionViewController {
     
     private var movies: [Movie] = []
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         activityIndicator.startAnimating()
@@ -48,8 +47,6 @@ class MoviesViewController: UICollectionViewController {
         descriptionVC.movie = movies[indexPath]
     }
 }
-
-
 
 extension MoviesViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

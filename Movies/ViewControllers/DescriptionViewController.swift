@@ -22,6 +22,13 @@ class DescriptionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let gestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(self.gestureFired))
+        gestureRecognizer.direction = .right
+        gestureRecognizer.numberOfTouchesRequired = 1
+        view.addGestureRecognizer(gestureRecognizer)
+        view.isUserInteractionEnabled = true
+        
+        
         fetchImage()
         
         titleLabel.text = movie.title
@@ -31,6 +38,10 @@ class DescriptionViewController: UIViewController {
         
         let genres = movie.genres ?? []
         genreLabel.text = "Жанр:  \(genres.joined(separator: ", "))"
+    }
+    
+    @objc func gestureFired(sender: UISwipeGestureRecognizer) {
+        navigationController?.popViewController(animated: true)
     }
 }
 

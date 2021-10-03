@@ -64,9 +64,7 @@ extension MoviesViewController {
                 case .success(let allMoviesDescriptions):
                     self.movies = allMoviesDescriptions.movies ?? []
                     self.collectionView.reloadData()
-                    if self.refreshControl != nil {
-                        self.refreshControl.endRefreshing()
-                    }
+                    self.refreshControl.endRefreshing()
                 case .failure(let error):
                     print(error)
                 }

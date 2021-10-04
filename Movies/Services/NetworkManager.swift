@@ -11,6 +11,7 @@ import Foundation
 enum Token: String {
     case tokenOne = "dcc9ee3f6e2b35a55462938d3514ac96"
     case tokenTwo = "f9b1c2c02f9919bf405d41f2cd177bf9"
+    case tokenThree = "a6ebb98fe7944cfb469d36b4bac6fe16"
 }
 
 enum NetworkError: Error {
@@ -23,7 +24,7 @@ class NetworkManager {
     static let shared = NetworkManager()
     
     var url: String {
-        "https://api.kinopoisk.cloud/movies/all/page/\(Int.random(in: 1...500))/token/\(Token.tokenOne.rawValue)"
+        "https://api.kinopoisk.cloud/movies/all/page/\(Int.random(in: 1...500))/token/\(Token.tokenThree.rawValue)"
     }
     
     init() {}

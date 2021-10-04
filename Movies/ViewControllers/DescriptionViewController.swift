@@ -12,7 +12,8 @@ class DescriptionViewController: UIViewController {
 
     @IBOutlet var posterImageView: UIImageView!
     
-    @IBOutlet weak var trailerButton: UIButton!
+    @IBOutlet var trailerButton: UIButton!
+    @IBOutlet var favoriteButton: UIButton!
     
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var yearLabel: UILabel!
@@ -21,11 +22,15 @@ class DescriptionViewController: UIViewController {
     @IBOutlet var descriptionLabel: UILabel!
     
     var movie: Movie!
+    var visibilityOfFavoriteButton = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         trailerButton.layer.cornerRadius = 12
+        favoriteButton.layer.cornerRadius = 12
+        
+        favoriteButton.isHidden = visibilityOfFavoriteButton
         
         let gestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(self.gestureFired))
         gestureRecognizer.direction = .right
@@ -44,6 +49,12 @@ class DescriptionViewController: UIViewController {
         genreLabel.text = "Жанр:  \(genres.joined(separator: ", "))"
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let favoriteVC = segue.destination as? FavoriteMoviesTableViewController else { return }
+        guard let movie = movie else { return }
+        favoriteVC.movies.append(movie)
+    }
+    
     @IBAction func trailerButtonTapped() {
         guard let trailer = movie.trailer else {
             showAlert(title: "Ошибка", message: "К сожалению, видео отсутствует 😔")
@@ -53,6 +64,10 @@ class DescriptionViewController: UIViewController {
         
         let safariViewController = SFSafariViewController(url: trailerURL)
         present(safariViewController, animated: true)
+    }
+    
+    @IBAction func favoriteButtonTapped() {
+        showAlert(title: "✅", message: "Фильм добавлен в избранные")
     }
     
     @objc func gestureFired(sender: UISwipeGestureRecognizer) {
@@ -67,9 +82,7 @@ class DescriptionViewController: UIViewController {
         )
         
         present(alert, animated: true)
-
         let okButton = UIAlertAction(title: "OK", style: .default)
-        
         alert.addAction(okButton)
     }
 }

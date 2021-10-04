@@ -60,4 +60,14 @@ class FavoriteMoviesTableViewController: UITableViewController {
     @IBAction func unwind(for unwindSegue: UIStoryboardSegue) {
         tableView.reloadData()
     }
+    
+    // MARK: -  TableView Delegate
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            movies.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
+    }
 }
+
+

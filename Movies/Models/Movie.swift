@@ -5,7 +5,7 @@
 //  Created by Анатолий Миронов on 24.09.2021.
 //
 
-struct Movie: Decodable {
+struct Movie: Codable {
     let title: String?
     let poster: String?
     let ratingKinopoisk: String?

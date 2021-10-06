@@ -27,8 +27,9 @@ class DescriptionViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        trailerButton.layer.cornerRadius = 12
-        favoriteButton.layer.cornerRadius = 12
+        trailerButton.layer.cornerRadius = 7
+        favoriteButton.layer.cornerRadius = 7
+        posterImageView.layer.cornerRadius = 7
         
         favoriteButton.isHidden = visibilityOfFavoriteButton
         
@@ -67,6 +68,8 @@ class DescriptionViewController: UIViewController {
     }
     
     @IBAction func favoriteButtonTapped() {
+        guard let movie = movie else { return }
+        StorageManager.shared.save(movie: movie)
     }
     
     @objc func gestureFired(sender: UISwipeGestureRecognizer) {

@@ -13,7 +13,7 @@ class FavoriteMoviesTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        movies = StorageManager.shared.fetchMovies()
         tableView.rowHeight = 50
     }
     
@@ -64,6 +64,7 @@ class FavoriteMoviesTableViewController: UITableViewController {
     // MARK: -  TableView Delegate
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
+            StorageManager.shared.deleteMovie(at: indexPath.row)
             movies.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }

@@ -67,7 +67,6 @@ class DescriptionViewController: UIViewController {
     }
     
     @IBAction func favoriteButtonTapped() {
-        showAlert(title: "✅", message: "Фильм добавлен в избранные")
     }
     
     @objc func gestureFired(sender: UISwipeGestureRecognizer) {

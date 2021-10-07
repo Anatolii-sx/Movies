@@ -27,7 +27,7 @@ class NetworkManager {
         "https://api.kinopoisk.cloud/movies/all/page/\(Int.random(in: 1...500))/token/\(Token.tokenOne.rawValue)"
     }
     
-    init() {}
+    private init() {}
     
     func fetchMovies(url: String, completion: @escaping (Result<AllMoviesDescriptions, NetworkError>) -> Void) {
         guard let url = URL(string: url) else {

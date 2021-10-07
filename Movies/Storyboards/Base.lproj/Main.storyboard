@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19162" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="1qz-pd-aJJ">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19144"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -95,7 +96,7 @@
                             <outlet property="delegate" destination="RDr-nk-vQ8" id="nQy-2G-GGK"/>
                         </connections>
                     </collectionView>
-                    <tabBarItem key="tabBarItem" title="Фильмы" image="sparkles.tv" catalog="system" id="RNa-vQ-Ugl"/>
+                    <tabBarItem key="tabBarItem" title="Фильмы" image="tv" catalog="system" id="RNa-vQ-Ugl"/>
                     <navigationItem key="navigationItem" title="Фильмы" largeTitleDisplayMode="always" id="adN-mU-Vub"/>
                     <connections>
                         <outlet property="activityIndicator" destination="BiA-Ab-IVc" id="f2W-uW-7TY"/>
@@ -155,13 +156,12 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iHm-Tz-4GM">
-                                                <rect key="frame" x="239" y="440" width="159" height="34.5"/>
+                                                <rect key="frame" x="239" y="440" width="159" height="33"/>
                                                 <color key="backgroundColor" red="0.25490196079999999" green="0.74117647060000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" title="🎞  Трейлер">
-                                                    <fontDescription key="titleFontDescription" type="system" weight="medium" pointSize="17"/>
-                                                </buttonConfiguration>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="  🎞  Трейлер"/>
                                                 <connections>
                                                     <action selector="trailerButtonTapped" destination="xr2-Ji-G1z" eventType="touchUpInside" id="lsz-Ho-voH"/>
                                                 </connections>
@@ -173,17 +173,16 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KfN-uL-OPd">
-                                                <rect key="frame" x="239" y="482.5" width="159" height="34.5"/>
+                                                <rect key="frame" x="239" y="481" width="159" height="34"/>
                                                 <color key="backgroundColor" red="0.25490196079999999" green="0.74117647060000003" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="159" id="QyB-Q0-wQB"/>
                                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="34" id="rzi-LO-y3D"/>
                                                 </constraints>
+                                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="17"/>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" title="⭐️  В избранное">
-                                                    <fontDescription key="titleFontDescription" type="system" weight="medium" pointSize="17"/>
-                                                </buttonConfiguration>
+                                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                <state key="normal" title="  ⭐️  В избранное"/>
                                                 <connections>
                                                     <action selector="favoriteButtonTapped" destination="xr2-Ji-G1z" eventType="touchUpInside" id="EPs-Te-jiU"/>
                                                     <segue destination="367-Tq-Rrl" kind="unwind" unwindAction="unwindFor:" id="Ojv-nm-fbQ"/>
@@ -348,9 +347,9 @@
     </inferredMetricsTieBreakers>
     <resources>
         <image name="pencil.circle" catalog="system" width="128" height="121"/>
-        <image name="sparkles.tv" catalog="system" width="128" height="97"/>
         <image name="star" catalog="system" width="128" height="116"/>
         <image name="star.fill" catalog="system" width="128" height="116"/>
+        <image name="tv" catalog="system" width="128" height="97"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

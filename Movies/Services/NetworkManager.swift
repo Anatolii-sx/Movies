@@ -7,9 +7,9 @@
 
 import Foundation
 
-// You can use 1 token for only 10 free requests
+// You can use 1 token for only 10 free requests per day
 enum Token: String {
-    case tokenOne = "dcc9ee3f6e2b35a55462938d3514ac96"
+    case tokenOne = "e705ff8540b59c221121b4537efc361d"
     case tokenTwo = "f9b1c2c02f9919bf405d41f2cd177bf9"
     case tokenThree = "a6ebb98fe7944cfb469d36b4bac6fe16"
 }

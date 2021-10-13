@@ -63,8 +63,9 @@ class DescriptionViewController: UIViewController {
     
     @IBAction func favoriteButtonTapped() {
         guard let movie = movie else { return }
-        StorageManager.shared.save(movie: movie)
+        StorageManager.shared.save(favoriteMovie: movie)
         showAlert(title: "✅", message: "Фильм добавлен в избранное")
+        
     }
     
     @objc func gestureFired(sender: UISwipeGestureRecognizer) {

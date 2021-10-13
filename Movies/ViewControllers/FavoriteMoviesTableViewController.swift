@@ -18,7 +18,7 @@ class FavoriteMoviesTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        movies = StorageManager.shared.fetchMovies()
+        fetchCoreData()
         tableView.reloadData()
     }
     
@@ -65,9 +65,38 @@ class FavoriteMoviesTableViewController: UITableViewController {
     // MARK: -  TableView Delegate
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            StorageManager.shared.deleteMovie(at: indexPath.row)
+            StorageManager.shared.deleteFromFavorites(favoriteMovie: movies[indexPath.row])
             movies.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
+    }
+}
+
+extension FavoriteMoviesTableViewController {
+    private func fetchCoreData() {
+        StorageManager.shared.fetchData { result in
+            switch result {
+            case .success(let films):
+                movies = []
+                for film in films {
+                    if film.isFavorite {
+                        movies.append(
+                            Movie(
+                                title: film.title,
+                                poster: film.poster,
+                                ratingKinopoisk: film.ratingKinopoisk,
+                                year: Int(film.year),
+                                description: film.descriptionOfMovie,
+                                genres: film.genres,
+                                trailer: film.trailer,
+                                isFavorite: film.isFavorite
+                            )
+                        )
+                    }
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
         }
     }
 }

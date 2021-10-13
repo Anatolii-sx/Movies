@@ -13,6 +13,7 @@ struct Movie: Codable {
     let description: String?
     let genres: [String]?
     let trailer: String?
+    var isFavorite = false
 }
 
 struct AllMoviesDescriptions: Decodable {

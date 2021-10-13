@@ -63,8 +63,8 @@ extension MoviesViewController {
                 self.movies = allMoviesDescriptions.movies ?? []
                 self.collectionView.reloadData()
                 self.refreshControl.endRefreshing()
-                CoreDataManager.shared.deleteAllFilms()
-                CoreDataManager.shared.save(movies: self.movies)
+                StorageManager.shared.deleteAllFilmsExceptFavorites()
+                StorageManager.shared.save(movies: self.movies)
             case .failure(let error):
                 self.movies = []
                 self.fetchCoreData()
@@ -78,7 +78,7 @@ extension MoviesViewController {
 
     // Получение данных
     private func fetchCoreData() {
-        CoreDataManager.shared.fetchData { result in
+        StorageManager.shared.fetchData { result in
             switch result {
             case .success(let films):
                 for film in films {
@@ -90,7 +90,8 @@ extension MoviesViewController {
                             year: Int(film.year),
                             description: film.descriptionOfMovie,
                             genres: film.genres,
-                            trailer: film.trailer
+                            trailer: film.trailer,
+                            isFavorite: film.isFavorite
                         )
                     )
                 }

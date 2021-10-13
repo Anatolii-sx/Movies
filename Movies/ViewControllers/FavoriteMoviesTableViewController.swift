@@ -13,8 +13,13 @@ class FavoriteMoviesTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        movies = StorageManager.shared.fetchMovies()
         tableView.rowHeight = 50
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        movies = StorageManager.shared.fetchMovies()
+        tableView.reloadData()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

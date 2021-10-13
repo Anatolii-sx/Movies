@@ -53,7 +53,8 @@ class StorageManager {
             film.descriptionOfMovie = movie.description
             film.genres = movie.genres
             film.trailer = movie.trailer
-            film.isFavorite = movie.isFavorite
+            film.isFavorite = movie.isFavorite ?? false
+
             saveContext()
         }
     }

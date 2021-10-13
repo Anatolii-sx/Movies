@@ -13,7 +13,7 @@ class FavoriteMoviesTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.rowHeight = 50
+        tableView.rowHeight = 150
     }
     
     override func viewWillAppear(_ animated: Bool) {

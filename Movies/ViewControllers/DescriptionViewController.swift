@@ -50,12 +50,6 @@ class DescriptionViewController: UIViewController {
         genreLabel.text = "Жанр:  \(genres.joined(separator: ", "))"
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let favoriteVC = segue.destination as? FavoriteMoviesTableViewController else { return }
-        guard let movie = movie else { return }
-        favoriteVC.movies.append(movie)
-    }
-    
     @IBAction func trailerButtonTapped() {
         guard let trailer = movie.trailer else {
             showAlert(title: "Ошибка", message: "К сожалению, видео отсутствует 😔")
@@ -70,6 +64,7 @@ class DescriptionViewController: UIViewController {
     @IBAction func favoriteButtonTapped() {
         guard let movie = movie else { return }
         StorageManager.shared.save(movie: movie)
+        showAlert(title: "✅", message: "Фильм добавлен в избранное")
     }
     
     @objc func gestureFired(sender: UISwipeGestureRecognizer) {

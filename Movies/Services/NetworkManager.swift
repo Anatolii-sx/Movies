@@ -7,7 +7,7 @@
 
 import Foundation
 
-// You can use 1 token for only 10 free requests per day
+// You can use 1 token for only 10 free requests a day
 enum Token: String {
     case tokenOne = "e705ff8540b59c221121b4537efc361d"
     case tokenTwo = "f9b1c2c02f9919bf405d41f2cd177bf9"
@@ -24,7 +24,7 @@ class NetworkManager {
     static let shared = NetworkManager()
     
     var url: String {
-        "https://api.kinopoisk.cloud/movies/all/page/\(Int.random(in: 1...500))/token/\(Token.tokenOne.rawValue)"
+        "https://api.kinopoisk.cloud/movies/all/page/\(Int.random(in: 1...500))/token/\(Token.tokenTwo.rawValue)"
     }
     
     private init() {}

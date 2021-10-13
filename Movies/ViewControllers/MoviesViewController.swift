@@ -26,7 +26,7 @@ class MoviesViewController: UICollectionViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return movies.count
+        movies.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -57,17 +57,48 @@ extension MoviesViewController: UICollectionViewDelegateFlowLayout {
 
 extension MoviesViewController {
     @objc private func downloadData() {
-            NetworkManager.shared.fetchMovies(url: NetworkManager.shared.url) { result in
-                switch result {
-                case .success(let allMoviesDescriptions):
-                    self.movies = allMoviesDescriptions.movies ?? []
+        NetworkManager.shared.fetchMovies(url: NetworkManager.shared.url) { result in
+            switch result {
+            case .success(let allMoviesDescriptions):
+                self.movies = allMoviesDescriptions.movies ?? []
+                self.collectionView.reloadData()
+                self.refreshControl.endRefreshing()
+                CoreDataManager.shared.deleteAllFilms()
+                CoreDataManager.shared.save(movies: self.movies)
+            case .failure(let error):
+                self.movies = []
+                self.fetchCoreData()
+                DispatchQueue.main.async {
                     self.collectionView.reloadData()
-                    self.refreshControl.endRefreshing()
-                case .failure(let error):
-                    print(error)
                 }
+                print(error)
             }
         }
+    }
+
+    // Получение данных
+    private func fetchCoreData() {
+        CoreDataManager.shared.fetchData { result in
+            switch result {
+            case .success(let films):
+                for film in films {
+                    movies.append(
+                        Movie(
+                            title: film.title,
+                            poster: film.poster,
+                            ratingKinopoisk: film.ratingKinopoisk,
+                            year: Int(film.year),
+                            description: film.descriptionOfMovie,
+                            genres: film.genres,
+                            trailer: film.trailer
+                        )
+                    )
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
     
     private func setupRefreshControl() {
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")

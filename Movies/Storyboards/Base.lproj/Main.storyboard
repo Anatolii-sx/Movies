@@ -185,7 +185,6 @@
                                                 <state key="normal" title="  ⭐️  В избранное"/>
                                                 <connections>
                                                     <action selector="favoriteButtonTapped" destination="xr2-Ji-G1z" eventType="touchUpInside" id="EPs-Te-jiU"/>
-                                                    <segue destination="367-Tq-Rrl" kind="unwind" unwindAction="unwindFor:" id="Ojv-nm-fbQ"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -245,7 +244,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8E6-kY-k7p" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-                <exit id="367-Tq-Rrl" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="4233.3333333333339" y="-292.63392857142856"/>
         </scene>

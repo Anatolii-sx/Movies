@@ -13,8 +13,12 @@ class FavoriteMoviesTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        movies = StorageManager.shared.fetchMovies()
         tableView.rowHeight = 50
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        movies = StorageManager.shared.fetchMovies()
+        tableView.reloadData()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -55,10 +59,6 @@ class FavoriteMoviesTableViewController: UITableViewController {
         cell.contentConfiguration = content
         
         return cell
-    }
-    
-    @IBAction func unwind(for unwindSegue: UIStoryboardSegue) {
-        tableView.reloadData()
     }
     
     // MARK: -  TableView Delegate

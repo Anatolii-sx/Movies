@@ -13,7 +13,7 @@ class FavoriteMoviesTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.rowHeight = 50
+        tableView.rowHeight = 150
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -60,10 +60,6 @@ class FavoriteMoviesTableViewController: UITableViewController {
         cell.contentConfiguration = content
         
         return cell
-    }
-    
-    @IBAction func unwind(for unwindSegue: UIStoryboardSegue) {
-        tableView.reloadData()
     }
     
     // MARK: -  TableView Delegate

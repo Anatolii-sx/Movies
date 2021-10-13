@@ -145,6 +145,7 @@
                                             </stackView>
                                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Xga-Ba-FRI">
                                                 <rect key="frame" x="16" y="16" width="382" height="350"/>
+                                                <color key="backgroundColor" red="0.25490196078431371" green="0.74117654560000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="Xga-Ba-FRI" secondAttribute="height" multiplier="24:25" constant="46" id="vKJ-GP-duu"/>
                                                 </constraints>

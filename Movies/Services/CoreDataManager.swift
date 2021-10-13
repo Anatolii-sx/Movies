@@ -11,7 +11,7 @@ class CoreDataManager {
     static let shared = CoreDataManager()
     
     // MARK: - Core Data stack
-    // "Вход" в БД
+
     var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "CoreData")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
@@ -21,8 +21,7 @@ class CoreDataManager {
         })
         return container
     }()
-    
-    // Создание viewContext (все изменения данных фиксируются в оперативной памяти)
+
     private let viewContext: NSManagedObjectContext
     
     private init() {
@@ -30,7 +29,7 @@ class CoreDataManager {
     }
     
     // MARK: - Public Methods
-    // Получение данных (массива [Film])
+
     func fetchData(completion: (Result<[Film], Error>) -> Void) {
         let fetchRequest = Film.fetchRequest()
 
@@ -42,10 +41,8 @@ class CoreDataManager {
         }
     }
     
-    // Сохранение данных. Сохраняемая новая задача и возвращаемое значение в completion для передачи в массив во вью
     func save(movies: [Movie]) {
         for movie in movies {
-            // Создание экземпляра модели данных из БД
             guard let entityDescription = NSEntityDescription.entity(forEntityName: "Film", in: viewContext) else { return }
             guard let film = NSManagedObject(entity: entityDescription, insertInto: viewContext) as? Film else { return }
             
@@ -56,12 +53,10 @@ class CoreDataManager {
             film.descriptionOfMovie = movie.description
             film.genres = movie.genres
             film.trailer = movie.trailer
-            
+            saveContext()
         }
-        saveContext()
     }
 
-    // Удаление фильмов из контекста и сохранение изменений в базе
     func deleteAllFilms() {
         fetchData { result in
             switch result {
@@ -75,7 +70,7 @@ class CoreDataManager {
     }
     
     // MARK: - Core Data Saving support
-    // Если есть изменения в viewContext, то сохранить в базе
+    
     func saveContext() {
         if viewContext.hasChanges {
             do {

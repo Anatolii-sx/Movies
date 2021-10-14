@@ -59,14 +59,13 @@ class StorageManager {
         }
     }
     
-    func save(favoriteMovie: Movie) {
+    func changeFavoriteStatusOfMovie(movie: Movie) {
         fetchData { result in
             switch result {
             case .success(let films):
                 for film in films {
-                    if film.title == favoriteMovie.title {
-                        film.isFavorite = true
-//                        film.isFavorite.toggle()
+                    if film.title == movie.title {
+                        film.isFavorite.toggle()
                         saveContext()
                     }
                 }
@@ -90,22 +89,6 @@ class StorageManager {
             }
         }
         saveContext()
-    }
-    
-    func deleteFromFavorites(favoriteMovie: Movie) {
-        fetchData { result in
-            switch result {
-            case .success(let films):
-                for film in films {
-                    if film.title == favoriteMovie.title {
-                        film.isFavorite = false
-                        saveContext()
-                    }
-                }
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }
     }
     
     // MARK: - Core Data Saving support

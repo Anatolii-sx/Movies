@@ -50,6 +50,11 @@ class DescriptionViewController: UIViewController {
         genreLabel.text = "Жанр:  \(genres.joined(separator: ", "))"
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        changeNameOfFavoriteButton()
+    }
+    
     @IBAction func trailerButtonTapped() {
         guard let trailer = movie.trailer else {
             showAlert(title: "Ошибка", message: "К сожалению, видео отсутствует 😔")
@@ -63,13 +68,28 @@ class DescriptionViewController: UIViewController {
     
     @IBAction func favoriteButtonTapped() {
         guard let movie = movie else { return }
-        StorageManager.shared.save(favoriteMovie: movie)
-        showAlert(title: "✅", message: "Фильм добавлен в избранное")
+        StorageManager.shared.changeFavoriteStatusOfMovie(movie: movie)
+        if movie.isFavorite == false {
+            showAlert(title: "✅", message: "Фильм добавлен в избранное")
+            favoriteButton.setTitle("  ⛔️ Из избранного", for: .normal)
+            self.movie.isFavorite?.toggle()
+        } else {
+            showAlert(title: "✅", message: "Фильм удалён из избранных")
+            favoriteButton.setTitle("  ⭐️ В избранное", for: .normal)
+            self.movie.isFavorite?.toggle()
+        }
         
     }
     
     @objc func gestureFired(sender: UISwipeGestureRecognizer) {
         navigationController?.popViewController(animated: true)
+    }
+    
+    private func changeNameOfFavoriteButton() {
+        guard let movie = movie else { return }
+        movie.isFavorite == false ?
+        favoriteButton.setTitle("  ⭐️ В избранное", for: .normal) :
+        favoriteButton.setTitle("  ⛔️ Из избранного", for: .normal)
     }
     
     private func showAlert(title: String, message: String) {

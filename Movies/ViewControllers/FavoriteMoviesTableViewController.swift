@@ -65,7 +65,7 @@ class FavoriteMoviesTableViewController: UITableViewController {
     // MARK: -  TableView Delegate
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            StorageManager.shared.deleteFromFavorites(favoriteMovie: movies[indexPath.row])
+            StorageManager.shared.changeFavoriteStatusOfMovie(movie: movies[indexPath.row])
             movies.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }

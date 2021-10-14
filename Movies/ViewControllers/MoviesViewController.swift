@@ -82,18 +82,20 @@ extension MoviesViewController {
             switch result {
             case .success(let films):
                 for film in films {
-                    movies.append(
-                        Movie(
-                            title: film.title,
-                            poster: film.poster,
-                            ratingKinopoisk: film.ratingKinopoisk,
-                            year: Int(film.year),
-                            description: film.descriptionOfMovie,
-                            genres: film.genres,
-                            trailer: film.trailer,
-                            isFavorite: film.isFavorite
+                    if film.isFavorite == false {
+                        movies.append(
+                            Movie(
+                                title: film.title,
+                                poster: film.poster,
+                                ratingKinopoisk: film.ratingKinopoisk,
+                                year: Int(film.year),
+                                description: film.descriptionOfMovie,
+                                genres: film.genres,
+                                trailer: film.trailer,
+                                isFavorite: film.isFavorite
+                            )
                         )
-                    )
+                    }
                 }
             case .failure(let error):
                 print(error.localizedDescription)

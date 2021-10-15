@@ -23,6 +23,9 @@ class DescriptionViewController: UIViewController {
     
     var movie: Movie!
     var visibilityOfFavoriteButton = false
+    var indexPath: Int!
+    var delegate: DescriptionViewControllerDelegate!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,15 +71,16 @@ class DescriptionViewController: UIViewController {
     
     @IBAction func favoriteButtonTapped() {
         guard let movie = movie else { return }
+        delegate.changeFavoriteStatusOfMovie(indexPath: indexPath)
         StorageManager.shared.changeFavoriteStatusOfMovie(movie: movie)
         if movie.isFavorite == false {
             showAlert(title: "✅", message: "Фильм добавлен в избранное")
             favoriteButton.setTitle("  ⛔️ Из избранного", for: .normal)
-            self.movie.isFavorite?.toggle()
+            self.movie.isFavorite.toggle()
         } else {
             showAlert(title: "✅", message: "Фильм удалён из избранных")
             favoriteButton.setTitle("  ⭐️ В избранное", for: .normal)
-            self.movie.isFavorite?.toggle()
+            self.movie.isFavorite.toggle()
         }
         
     }

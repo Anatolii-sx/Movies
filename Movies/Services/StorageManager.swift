@@ -53,7 +53,7 @@ class StorageManager {
             film.descriptionOfMovie = movie.description
             film.genres = movie.genres
             film.trailer = movie.trailer
-            film.isFavorite = movie.isFavorite ?? false
+            film.isFavorite = movie.isFavorite
 
             saveContext()
         }
@@ -84,11 +84,11 @@ class StorageManager {
                         viewContext.delete(film)
                     }
                 }
+                saveContext()
             case .failure(let error):
                 print(error.localizedDescription)
             }
         }
-        saveContext()
     }
     
     // MARK: - Core Data Saving support

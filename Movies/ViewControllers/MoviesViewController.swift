@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol DescriptionViewControllerDelegate {
+    func changeFavoriteStatusOfMovie(indexPath: Int)
+}
+
 class MoviesViewController: UICollectionViewController {
     
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
@@ -46,6 +50,8 @@ class MoviesViewController: UICollectionViewController {
         
         descriptionVC.movie = movies[indexPath]
         descriptionVC.visibilityOfFavoriteButton = false
+        descriptionVC.indexPath = indexPath
+        descriptionVC.delegate = self
     }
 }
 
@@ -65,6 +71,10 @@ extension MoviesViewController {
                 self.refreshControl.endRefreshing()
                 StorageManager.shared.deleteAllFilmsExceptFavorites()
                 StorageManager.shared.save(movies: self.movies)
+                
+//                StorageManager.shared.save(movies: downloadedMovies)
+//                self.fetchCoreData()
+                
             case .failure(let error):
                 self.movies = []
                 self.fetchCoreData()
@@ -106,6 +116,12 @@ extension MoviesViewController {
     private func setupRefreshControl() {
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         refreshControl.addTarget(self, action: #selector(downloadData), for: .valueChanged)
+    }
+}
+
+extension MoviesViewController: DescriptionViewControllerDelegate {
+    func changeFavoriteStatusOfMovie(indexPath: Int) {
+        movies[indexPath].isFavorite.toggle()
     }
 }
 

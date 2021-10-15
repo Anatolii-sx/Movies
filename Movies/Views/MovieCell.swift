@@ -15,7 +15,7 @@ class MovieCell: UICollectionViewCell {
     @IBOutlet var ratingLabel: UILabel!
     @IBOutlet var titleLabel: UILabel!
     
-    func configure(movie: Movie, cell: UICollectionViewCell) {
+    func configure(movie: Film, cell: UICollectionViewCell) {
         
         cell.layer.cornerRadius = 20
         cell.layer.shadowRadius = 6
@@ -26,13 +26,11 @@ class MovieCell: UICollectionViewCell {
         posterImage.layer.cornerRadius = 20
         ratingStackView.layer.cornerRadius = 5
         
-        DispatchQueue.main.async {
-            self.titleLabel.text = "\(movie.title ?? "")"
-            let rating = movie.ratingKinopoisk ?? ""
-            let ratingDouble = Double(rating)
-            let ratingAround = String(format: "%.01f", ratingDouble ?? 0)
-            self.ratingLabel.text = ratingAround
-        }
+        titleLabel.text = "\(movie.title ?? "")"
+        let rating = movie.ratingKinopoisk ?? ""
+        let ratingDouble = Double(rating)
+        let ratingAround = String(format: "%.01f", ratingDouble ?? 0)
+        ratingLabel.text = ratingAround
         
         DispatchQueue.global().async {
             guard let url = URL(string: "https:\(movie.poster ?? "")") else { return }

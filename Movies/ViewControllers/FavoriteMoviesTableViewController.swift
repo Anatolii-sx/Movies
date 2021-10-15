@@ -9,11 +9,11 @@ import UIKit
 
 class FavoriteMoviesTableViewController: UITableViewController {
     
-    var movies: [Movie] = []
+    var movies: [Film] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.rowHeight = 150
+        tableView.rowHeight = 70
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -62,7 +62,8 @@ class FavoriteMoviesTableViewController: UITableViewController {
     // MARK: -  TableView Delegate
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            StorageManager.shared.changeFavoriteStatusOfMovie(movie: movies[indexPath.row])
+            movies[indexPath.row].isFavorite.toggle()
+            StorageManager.shared.saveContext()
             movies.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
@@ -77,19 +78,7 @@ extension FavoriteMoviesTableViewController {
                 movies = []
                 for film in films {
                     if film.isFavorite {
-                        movies.append(
-                            Movie(
-                                title: film.title,
-                                poster: film.poster,
-                                ratingKinopoisk: film.ratingKinopoisk,
-                                year: Int(film.year),
-                                description: film.descriptionOfMovie,
-                                genres: film.genres,
-                                trailer: film.trailer,
-                                isFavorite: film.isFavorite,
-                                posterImageData: film.posterImageData
-                            )
-                        )
+                        movies.append(film)
                     }
                 }
             case .failure(let error):

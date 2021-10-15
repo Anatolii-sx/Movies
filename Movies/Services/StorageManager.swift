@@ -46,20 +46,21 @@ class StorageManager {
             guard let entityDescription = NSEntityDescription.entity(forEntityName: "Film", in: viewContext) else { return }
             guard let film = NSManagedObject(entity: entityDescription, insertInto: viewContext) as? Film else { return }
             
-            film.title = movie.title
-            film.poster = movie.poster
-            film.ratingKinopoisk = movie.ratingKinopoisk
+            film.title = movie.title ?? ""
+            film.poster = movie.poster ?? ""
+            film.ratingKinopoisk = movie.ratingKinopoisk ?? ""
             film.year = Int64(movie.year ?? 0)
-            film.descriptionOfMovie = movie.description
-            film.genres = movie.genres
-            film.trailer = movie.trailer
-            film.isFavorite = movie.isFavorite ?? false
+            film.descriptionOfMovie = movie.description ?? ""
+            film.genres = movie.genres ?? []
+            film.trailer = movie.trailer ?? ""
+            film.isFavorite = false
+            film.posterImageData = nil
 
             saveContext()
         }
     }
     
-    func savePosterImageDataOfMovie(movie: Movie, imageData: Data) {
+    func savePosterImageDataOfMovie(movie: Film, imageData: Data) {
         fetchData { result in
             switch result {
             case .success(let films):
@@ -75,7 +76,7 @@ class StorageManager {
         }
     }
     
-    func changeFavoriteStatusOfMovie(movie: Movie) {
+    func changeFavoriteStatusOfMovie(movie: Film) {
         fetchData { result in
             switch result {
             case .success(let films):
@@ -91,7 +92,7 @@ class StorageManager {
         }
     }
     
-    func getPosterImageData(movie: Movie, completion: (Data) -> Void) {
+    func getPosterImageData(movie: Film, completion: (Data) -> Void) {
         fetchData { result in
             switch result {
             case .success(let films):

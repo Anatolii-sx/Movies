@@ -21,7 +21,7 @@ class DescriptionViewController: UIViewController {
     @IBOutlet var genreLabel: UILabel!
     @IBOutlet var descriptionLabel: UILabel!
     
-    var movie: Movie!
+    var movie: Film!
     var visibilityOfFavoriteButton = false
     var indexPath: Int!
     var delegate: DescriptionViewControllerDelegate!
@@ -44,10 +44,10 @@ class DescriptionViewController: UIViewController {
         
         fetchImage()
         
-        titleLabel.text = movie.title ?? ""
-        yearLabel.text = "Год:  \(movie.year ?? 0)"
+        titleLabel.text = movie.title
+        yearLabel.text = "Год:  \(movie.year)"
         ratingLabel.text = "Рейтинг:  \(movie.ratingKinopoisk ?? "")"
-        descriptionLabel.text = "Описание:  \(movie.description ?? "")"
+        descriptionLabel.text = "Описание:  \(movie.descriptionOfMovie ?? "")"
         
         let genres = movie.genres ?? []
         genreLabel.text = "Жанр:  \(genres.joined(separator: ", "))"
@@ -71,16 +71,18 @@ class DescriptionViewController: UIViewController {
     
     @IBAction func favoriteButtonTapped() {
         guard let movie = movie else { return }
-        delegate.changeFavoriteStatusOfMovie(indexPath: indexPath)
-        StorageManager.shared.changeFavoriteStatusOfMovie(movie: movie)
+        delegate.updateFavoriteStatusOfMovie(indexPath: indexPath)
+//        StorageManager.shared.changeFavoriteStatusOfMovie(movie: movie)
         if movie.isFavorite == false {
             showAlert(title: "✅", message: "Фильм добавлен в избранное")
             favoriteButton.setTitle("  ⛔️ Из избранного", for: .normal)
-            self.movie.isFavorite?.toggle()
+            self.movie.isFavorite.toggle()
+            StorageManager.shared.saveContext()
         } else {
             showAlert(title: "✅", message: "Фильм удалён из избранных")
             favoriteButton.setTitle("  ⭐️ В избранное", for: .normal)
-            self.movie.isFavorite?.toggle()
+            self.movie.isFavorite.toggle()
+            StorageManager.shared.saveContext()
         }
         
     }

@@ -8,7 +8,7 @@
 import UIKit
 
 protocol DescriptionViewControllerDelegate {
-    func changeFavoriteStatusOfMovie(indexPath: Int)
+    func updateFavoriteStatusOfMovie(indexPath: Int)
 }
 
 class MoviesViewController: UICollectionViewController {
@@ -17,7 +17,7 @@ class MoviesViewController: UICollectionViewController {
     
     private let refreshControl = UIRefreshControl()
     
-    private var movies: [Movie] = []
+    private var movies: [Film] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,15 +67,12 @@ extension MoviesViewController {
         NetworkManager.shared.fetchMovies(url: NetworkManager.shared.url) { result in
             switch result {
             case .success(let allMoviesDescriptions):
-                self.movies = allMoviesDescriptions.movies ?? []
+                let downloadedMovies = allMoviesDescriptions.movies ?? []
+                StorageManager.shared.deleteAllFilmsExceptFavorites()
+                StorageManager.shared.save(movies: downloadedMovies)
+                self.fetchCoreData()
                 self.collectionView.reloadData()
                 self.refreshControl.endRefreshing()
-                StorageManager.shared.deleteAllFilmsExceptFavorites()
-                StorageManager.shared.save(movies: self.movies)
-                
-//                StorageManager.shared.save(movies: downloadedMovies)
-//                self.fetchCoreData()
-                
             case .failure(let error):
                 self.movies = []
                 self.fetchCoreData()
@@ -93,20 +90,8 @@ extension MoviesViewController {
             switch result {
             case .success(let films):
                 for film in films {
-                    if film.isFavorite == false {
-                        movies.append(
-                            Movie(
-                                title: film.title,
-                                poster: film.poster,
-                                ratingKinopoisk: film.ratingKinopoisk,
-                                year: Int(film.year),
-                                description: film.descriptionOfMovie,
-                                genres: film.genres,
-                                trailer: film.trailer,
-                                isFavorite: film.isFavorite,
-                                posterImageData: film.posterImageData
-                            )
-                        )
+                    if !film.isFavorite {
+                        movies.append(film)
                     }
                 }
             case .failure(let error):
@@ -122,8 +107,9 @@ extension MoviesViewController {
 }
 
 extension MoviesViewController: DescriptionViewControllerDelegate {
-    func changeFavoriteStatusOfMovie(indexPath: Int) {
-        movies[indexPath].isFavorite?.toggle()
+    func updateFavoriteStatusOfMovie(indexPath: Int) {
+        let number = IndexPath(item: indexPath, section: 0)
+        collectionView.reloadItems(at: [number])
     }
 }
 

@@ -36,9 +36,17 @@ class MovieCell: UICollectionViewCell {
         
         DispatchQueue.global().async {
             guard let url = URL(string: "https:\(movie.poster ?? "")") else { return }
-            guard let imageData = try? Data(contentsOf: url) else { return }
-            DispatchQueue.main.async {
-                self.posterImage.image = UIImage(data: imageData)
+            if let imageData = try? Data(contentsOf: url) {
+                DispatchQueue.main.async {
+                    self.posterImage.image = UIImage(data: imageData)
+                }
+                StorageManager.shared.savePosterImageDataOfMovie(movie: movie, imageData: imageData)
+            } else {
+                StorageManager.shared.getPosterImageData(movie: movie) { data in
+                    DispatchQueue.main.async {
+                        self.posterImage.image = UIImage(data: data)
+                    }
+                }
             }
         }
     }

@@ -76,11 +76,11 @@ class DescriptionViewController: UIViewController {
         if movie.isFavorite == false {
             showAlert(title: "✅", message: "Фильм добавлен в избранное")
             favoriteButton.setTitle("  ⛔️ Из избранного", for: .normal)
-            self.movie.isFavorite.toggle()
+            self.movie.isFavorite?.toggle()
         } else {
             showAlert(title: "✅", message: "Фильм удалён из избранных")
             favoriteButton.setTitle("  ⭐️ В избранное", for: .normal)
-            self.movie.isFavorite.toggle()
+            self.movie.isFavorite?.toggle()
         }
         
     }
@@ -111,15 +111,10 @@ class DescriptionViewController: UIViewController {
 
 extension DescriptionViewController {
     func fetchImage() {
-        DispatchQueue.global().async {
-            guard let url = URL(string: "https:\(self.movie.poster ?? "")") else { return }
-            guard let imageData = try? Data(contentsOf: url) else { return }
-            
-            DispatchQueue.main.async {
-                self.posterImageView.image = UIImage(data: imageData)
+        StorageManager.shared.getPosterImageData(movie: movie) { data in
+                self.posterImageView.image = UIImage(data: data)
             }
         }
-    }
 }
 
 

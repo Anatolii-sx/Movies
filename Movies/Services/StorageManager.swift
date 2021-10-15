@@ -53,9 +53,25 @@ class StorageManager {
             film.descriptionOfMovie = movie.description
             film.genres = movie.genres
             film.trailer = movie.trailer
-            film.isFavorite = movie.isFavorite
+            film.isFavorite = movie.isFavorite ?? false
 
             saveContext()
+        }
+    }
+    
+    func savePosterImageDataOfMovie(movie: Movie, imageData: Data) {
+        fetchData { result in
+            switch result {
+            case .success(let films):
+                for film in films {
+                    if film.title == movie.title {
+                        film.posterImageData = imageData
+                        saveContext()
+                    }
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
         }
     }
     
@@ -67,6 +83,22 @@ class StorageManager {
                     if film.title == movie.title {
                         film.isFavorite.toggle()
                         saveContext()
+                    }
+                }
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    func getPosterImageData(movie: Movie, completion: (Data) -> Void) {
+        fetchData { result in
+            switch result {
+            case .success(let films):
+                for film in films {
+                    if film.title == movie.title {
+                        guard let posterImageData = film.posterImageData else { return }
+                        completion(posterImageData)
                     }
                 }
             case .failure(let error):

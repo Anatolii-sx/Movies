@@ -37,6 +37,7 @@ class MoviesViewController: UICollectionViewController {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "movieID", for: indexPath) as? MovieCell else { return UICollectionViewCell() }
         
         let movie = movies[indexPath.item]
+        
         cell.configure(movie: movie, cell: cell)
         
         self.activityIndicator.stopAnimating()
@@ -102,7 +103,8 @@ extension MoviesViewController {
                                 description: film.descriptionOfMovie,
                                 genres: film.genres,
                                 trailer: film.trailer,
-                                isFavorite: film.isFavorite
+                                isFavorite: film.isFavorite,
+                                posterImageData: film.posterImageData
                             )
                         )
                     }
@@ -121,7 +123,7 @@ extension MoviesViewController {
 
 extension MoviesViewController: DescriptionViewControllerDelegate {
     func changeFavoriteStatusOfMovie(indexPath: Int) {
-        movies[indexPath].isFavorite.toggle()
+        movies[indexPath].isFavorite?.toggle()
     }
 }
 

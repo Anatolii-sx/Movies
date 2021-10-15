@@ -46,15 +46,12 @@ class FavoriteMoviesTableViewController: UITableViewController {
         let genres = movie.genres ?? []
         content.secondaryText = genres.joined(separator: ", ")
         
-        DispatchQueue.global().async {
-            guard let url = URL(string: "https:\(movie.poster ?? "")") else { return }
-            guard let imageData = try? Data(contentsOf: url) else { return }
-            DispatchQueue.main.async {
-                content.image = UIImage(data: imageData)
-                content.imageProperties.cornerRadius = 3
-                cell.contentConfiguration = content
-            }
+        StorageManager.shared.getPosterImageData(movie: movie) { data in
+            content.image = UIImage(data: data)
         }
+        
+        content.imageProperties.cornerRadius = 3
+        cell.contentConfiguration = content
         
         cell.accessoryType = .disclosureIndicator
         cell.contentConfiguration = content
@@ -89,7 +86,8 @@ extension FavoriteMoviesTableViewController {
                                 description: film.descriptionOfMovie,
                                 genres: film.genres,
                                 trailer: film.trailer,
-                                isFavorite: film.isFavorite
+                                isFavorite: film.isFavorite,
+                                posterImageData: film.posterImageData
                             )
                         )
                     }

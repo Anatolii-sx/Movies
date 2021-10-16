@@ -20,12 +20,6 @@ class FavoriteMoviesTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        movies = StorageManager.shared.fetchMovies()
-        tableView.reloadData()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         navigationController?.navigationBar.topItem?.title = "Избранное"
         fetchCoreData()
         tableView.reloadData()
@@ -95,5 +89,3 @@ extension FavoriteMoviesTableViewController {
         }
     }
 }
-
-

@@ -31,6 +31,7 @@ class MoviesViewController: UICollectionViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.navigationBar.topItem?.title = "Фильмы"
         refreshControl.endRefreshing()
     }
 

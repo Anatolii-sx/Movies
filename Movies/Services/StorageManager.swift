@@ -11,7 +11,6 @@ class StorageManager {
     static let shared = StorageManager()
     
     // MARK: - Core Data stack
-
     var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "CoreData")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
@@ -29,7 +28,6 @@ class StorageManager {
     }
     
     // MARK: - Public Methods
-
     func fetchData(completion: (Result<[Film], Error>) -> Void) {
         let fetchRequest = Film.fetchRequest()
 
@@ -41,6 +39,7 @@ class StorageManager {
         }
     }
     
+    // Save data from Network Manager
     func save(movies: [Movie]) {
         for movie in movies {
             guard let entityDescription = NSEntityDescription.entity(forEntityName: "Film", in: viewContext) else { return }
@@ -59,55 +58,18 @@ class StorageManager {
             saveContext()
         }
     }
-    
-    func savePosterImageDataOfMovie(movie: Film, imageData: Data) {
-        fetchData { result in
-            switch result {
-            case .success(let films):
-                for film in films {
-                    if film.title == movie.title {
-                        film.posterImageData = imageData
-                        saveContext()
-                    }
-                }
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }
-    }
-    
-    func changeFavoriteStatusOfMovie(movie: Film) {
-        fetchData { result in
-            switch result {
-            case .success(let films):
-                for film in films {
-                    if film.title == movie.title {
-                        film.isFavorite.toggle()
-                        saveContext()
-                    }
-                }
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }
-    }
-    
-    func getPosterImageData(movie: Film, completion: (Data) -> Void) {
-        fetchData { result in
-            switch result {
-            case .success(let films):
-                for film in films {
-                    if film.title == movie.title {
-                        guard let posterImageData = film.posterImageData else { return }
-                        completion(posterImageData)
-                    }
-                }
-            case .failure(let error):
-                print(error.localizedDescription)
-            }
-        }
-    }
 
+    // If we don't have the Internet
+    func getPosterImageData(movie: Film, completion: (Data) -> Void) {
+        guard let posterImageData = movie.posterImageData else { return }
+        completion(posterImageData)
+    }
+    
+    // If we have the Internet
+    func savePosterImageData(movie: Film, imageData: Data) {
+        movie.posterImageData = imageData
+    }
+    
     func deleteAllFilmsExceptFavorites() {
         fetchData { result in
             switch result {
@@ -125,7 +87,6 @@ class StorageManager {
     }
     
     // MARK: - Core Data Saving support
-    
     func saveContext() {
         if viewContext.hasChanges {
             do {

@@ -11,7 +11,7 @@ import Foundation
 enum Token: String {
     case tokenOne = "e705ff8540b59c221121b4537efc361d"
     case tokenTwo = "f9b1c2c02f9919bf405d41f2cd177bf9"
-    case tokenThree = "a6ebb98fe7944cfb469d36b4bac6fe16"
+    case tokenThree = "a529e5de7df6ad85fdafb3a8d85cbb63"
 }
 
 enum NetworkError: Error {

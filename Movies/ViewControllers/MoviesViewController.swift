@@ -28,6 +28,11 @@ class MoviesViewController: UICollectionViewController {
         setupRefreshControl()
         downloadData()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        refreshControl.endRefreshing()
+    }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         movies.count
@@ -67,6 +72,7 @@ extension MoviesViewController {
         NetworkManager.shared.fetchMovies(url: NetworkManager.shared.url) { result in
             switch result {
             case .success(let allMoviesDescriptions):
+                self.movies = []
                 let downloadedMovies = allMoviesDescriptions.movies ?? []
                 StorageManager.shared.deleteAllFilmsExceptFavorites()
                 StorageManager.shared.save(movies: downloadedMovies)

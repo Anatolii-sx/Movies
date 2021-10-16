@@ -37,8 +37,8 @@ class MovieCell: UICollectionViewCell {
             if let imageData = try? Data(contentsOf: url) {
                 DispatchQueue.main.async {
                     self.posterImage.image = UIImage(data: imageData)
+                    StorageManager.shared.savePosterImageDataOfMovie(movie: movie, imageData: imageData)
                 }
-                StorageManager.shared.savePosterImageDataOfMovie(movie: movie, imageData: imageData)
             } else {
                 StorageManager.shared.getPosterImageData(movie: movie) { data in
                     DispatchQueue.main.async {

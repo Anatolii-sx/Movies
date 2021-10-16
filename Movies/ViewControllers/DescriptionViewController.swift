@@ -110,7 +110,7 @@ class DescriptionViewController: UIViewController {
         let safariViewController = SFSafariViewController(url: trailerURL)
         present(safariViewController, animated: true)
     }
-    
+  
     private func showAlert(title: String, message: String) {
         let alert = UIAlertController(
             title: title,

@@ -22,7 +22,7 @@ class DescriptionViewController: UIViewController {
     @IBOutlet var trailerButton: UIButton!
     @IBOutlet var favoriteButton: UIButton!
     
-    // MARK: - Public properties
+    // MARK: - Public Properties
     var movie: Film!
     var indexPath: Int!
     var delegate: DescriptionViewControllerDelegate!
@@ -44,7 +44,7 @@ class DescriptionViewController: UIViewController {
         setStartedTitleOfFavoriteButton()
     }
 
-    // MARK: - IBActions
+    // MARK: - IB Actions
     @IBAction func trailerButtonTapped() {
         showTrailer()
     }
@@ -90,19 +90,15 @@ class DescriptionViewController: UIViewController {
     }
     
     private func changeTitleOfFavoriteButton() {
+        if movie.isFavorite {
+            showAlert(title: "✅", message: "Фильм удалён из избранных")
+            favoriteButton.setTitle("  ⭐️ В избранное", for: .normal)
+        } else {
+            showAlert(title: "✅", message: "Фильм добавлен в избранные")
+            favoriteButton.setTitle("  ⛔️ Из избранного", for: .normal)
+        }
         movie.isFavorite.toggle()
-        setStartedTitleOfFavoriteButton()
         StorageManager.shared.saveContext()
-        
-//        if movie.isFavorite {
-//            showAlert(title: "✅", message: "Фильм удалён из избранных")
-//            favoriteButton.setTitle("  ⭐️ В избранное", for: .normal)
-//        } else {
-//            showAlert(title: "✅", message: "Фильм добавлен в избранные")
-//            favoriteButton.setTitle("  ⛔️ Из избранного", for: .normal)
-//        }
-//        movie.isFavorite.toggle()
-//        StorageManager.shared.saveContext()
     }
     
     private func showTrailer() {
@@ -127,7 +123,7 @@ class DescriptionViewController: UIViewController {
     }
 }
 
-// MARK: - Getting image from Core Data
+// MARK: - Image from Core Data
 extension DescriptionViewController {
     func fetchImage() {
         StorageManager.shared.getPosterImageData(movie: movie) { data in

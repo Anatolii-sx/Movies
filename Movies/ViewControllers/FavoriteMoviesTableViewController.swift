@@ -9,7 +9,7 @@ import UIKit
 
 class FavoriteMoviesTableViewController: UITableViewController {
     
-    // MARK: - Public properties
+    // MARK: - Public Properties
     var movies: [Film] = []
     
     // MARK: - Override Methods
@@ -74,7 +74,7 @@ class FavoriteMoviesTableViewController: UITableViewController {
     }
 }
 
-    // MARK: - Getting data from Core Data
+// MARK: - Data from Core Data
 extension FavoriteMoviesTableViewController {
     private func fetchCoreData() {
         StorageManager.shared.fetchData { result in

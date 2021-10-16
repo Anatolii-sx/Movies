@@ -8,6 +8,7 @@
 import UIKit
 
 class MovieCell: UICollectionViewCell {
+    // MARK: - IB Outlets
     @IBOutlet var posterImage: UIImageView!
     
     @IBOutlet var ratingStackView: UIStackView!
@@ -15,6 +16,7 @@ class MovieCell: UICollectionViewCell {
     @IBOutlet var ratingLabel: UILabel!
     @IBOutlet var titleLabel: UILabel!
     
+    // MARK: - Public Method
     func configure(movie: Film, cell: UICollectionViewCell) {
         
         cell.layer.cornerRadius = 20
@@ -27,6 +29,7 @@ class MovieCell: UICollectionViewCell {
         ratingStackView.layer.cornerRadius = 5
         
         titleLabel.text = "\(movie.title ?? "")"
+        
         let rating = movie.ratingKinopoisk ?? ""
         let ratingDouble = Double(rating)
         let ratingAround = String(format: "%.01f", ratingDouble ?? 0)

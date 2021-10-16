@@ -13,18 +13,19 @@ protocol DescriptionViewControllerDelegate {
 
 class MoviesViewController: UICollectionViewController {
     
+    // MARK: - IB Outlets
     @IBOutlet var activityIndicator: UIActivityIndicatorView!
     
+    // MARK: - Private Properties
     private let refreshControl = UIRefreshControl()
-    
     private var movies: [Film] = []
     
+    // MARK: - Override Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         activityIndicator.startAnimating()
         activityIndicator.hidesWhenStopped = true
         
-        collectionView.refreshControl = refreshControl
         setupRefreshControl()
         downloadData()
     }
@@ -41,13 +42,9 @@ class MoviesViewController: UICollectionViewController {
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "movieID", for: indexPath) as? MovieCell else { return UICollectionViewCell() }
-        
         let movie = movies[indexPath.item]
-        
         cell.configure(movie: movie, cell: cell)
-        
         self.activityIndicator.stopAnimating()
-        
         return cell
     }
 
@@ -62,22 +59,43 @@ class MoviesViewController: UICollectionViewController {
     }
 }
 
+// MARK: - Collection View Item Size
 extension MoviesViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         CGSize(width: 150, height: 300)
     }
 }
 
+// MARK: - Refresh Controll
+extension MoviesViewController {
+    private func setupRefreshControl() {
+        collectionView.refreshControl = refreshControl
+        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        refreshControl.addTarget(self, action: #selector(downloadData), for: .valueChanged)
+    }
+}
+
+// MARK: - Description View Controller Delegate
+extension MoviesViewController: DescriptionViewControllerDelegate {
+    func updateFavoriteStatusOfMovie(indexPath: Int) {
+        let number = IndexPath(item: indexPath, section: 0)
+        collectionView.reloadItems(at: [number])
+    }
+}
+
+// MARK: - Data from Network Manager
 extension MoviesViewController {
     @objc private func downloadData() {
         NetworkManager.shared.fetchMovies(url: NetworkManager.shared.url) { result in
             switch result {
             case .success(let allMoviesDescriptions):
-                self.movies = []
                 let downloadedMovies = allMoviesDescriptions.movies ?? []
+                self.movies = []
+                
                 StorageManager.shared.deleteAllFilmsExceptFavorites()
                 StorageManager.shared.save(movies: downloadedMovies)
                 self.fetchCoreData()
+                
                 self.collectionView.reloadData()
                 self.refreshControl.endRefreshing()
             case .failure(let error):
@@ -90,34 +108,23 @@ extension MoviesViewController {
             }
         }
     }
+}
 
-    // Получение данных
+// MARK: - Data from Core Data
+extension MoviesViewController {
     private func fetchCoreData() {
         StorageManager.shared.fetchData { result in
             switch result {
             case .success(let films):
-                for film in films {
-                    if !film.isFavorite {
-                        movies.append(film)
-                    }
-                }
+                let movies = films.filter {!$0.isFavorite}
+                self.movies = movies
             case .failure(let error):
                 print(error.localizedDescription)
             }
         }
     }
-    
-    private func setupRefreshControl() {
-        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
-        refreshControl.addTarget(self, action: #selector(downloadData), for: .valueChanged)
-    }
 }
 
-extension MoviesViewController: DescriptionViewControllerDelegate {
-    func updateFavoriteStatusOfMovie(indexPath: Int) {
-        let number = IndexPath(item: indexPath, section: 0)
-        collectionView.reloadItems(at: [number])
-    }
-}
+
 
 

@@ -56,7 +56,7 @@ class MoviesViewController: UICollectionViewController {
         guard let indexPath = collectionView.indexPathsForSelectedItems?.first?.item else { return }
         
         descriptionVC.movie = movies[indexPath]
-        descriptionVC.visibilityOfFavoriteButton = false
+        descriptionVC.isFavoriteButtonHidden = false
         descriptionVC.indexPath = indexPath
         descriptionVC.delegate = self
     }

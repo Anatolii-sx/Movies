@@ -9,8 +9,10 @@ import UIKit
 
 class FavoriteMoviesTableViewController: UITableViewController {
     
+    // MARK: - Public properties
     var movies: [Film] = []
     
+    // MARK: - Override Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.rowHeight = 70
@@ -23,16 +25,16 @@ class FavoriteMoviesTableViewController: UITableViewController {
         tableView.reloadData()
     }
     
+    // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let descriptionVC = segue.destination as? DescriptionViewController else { return }
         guard let indexPath = tableView.indexPathForSelectedRow else { return }
         let movie = movies[indexPath.row]
         descriptionVC.movie = movie
-        descriptionVC.visibilityOfFavoriteButton = true
+        descriptionVC.isFavoriteButtonHidden = true
     }
     
     // MARK: - Table view data source
-    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         movies.count
     }
@@ -42,21 +44,21 @@ class FavoriteMoviesTableViewController: UITableViewController {
         var content = cell.defaultContentConfiguration()
         let movie = movies[indexPath.row]
         
+        // Set text
         content.text = movie.title ?? ""
         
+        // Set secondary text
         let genres = movie.genres ?? []
         content.secondaryText = genres.joined(separator: ", ")
         
+        // Set image
         StorageManager.shared.getPosterImageData(movie: movie) { data in
             content.image = UIImage(data: data)
+            content.imageProperties.cornerRadius = 3
         }
-        
-        content.imageProperties.cornerRadius = 3
-        cell.contentConfiguration = content
         
         cell.accessoryType = .disclosureIndicator
         cell.contentConfiguration = content
-        
         return cell
     }
     
@@ -65,23 +67,21 @@ class FavoriteMoviesTableViewController: UITableViewController {
         if editingStyle == .delete {
             movies[indexPath.row].isFavorite.toggle()
             StorageManager.shared.saveContext()
+            
             movies.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }
 }
 
+    // MARK: - Getting data from Core Data
 extension FavoriteMoviesTableViewController {
     private func fetchCoreData() {
         StorageManager.shared.fetchData { result in
             switch result {
             case .success(let films):
-                movies = []
-                for film in films {
-                    if film.isFavorite {
-                        movies.append(film)
-                    }
-                }
+                let movies = films.filter {$0.isFavorite}
+                self.movies = movies
             case .failure(let error):
                 print(error.localizedDescription)
             }

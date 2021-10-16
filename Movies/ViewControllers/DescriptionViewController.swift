@@ -26,12 +26,12 @@ class DescriptionViewController: UIViewController {
     var movie: Film!
     var indexPath: Int!
     var delegate: DescriptionViewControllerDelegate!
-    var visibilityOfFavoriteButton = false
+    var isFavoriteButtonHidden: Bool!
     
     // MARK: - Override Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        favoriteButton.isHidden = visibilityOfFavoriteButton
+        favoriteButton.isHidden = isFavoriteButtonHidden
         
         setCornerRadiusForButtonsAndImage()
         setTextInLabels()

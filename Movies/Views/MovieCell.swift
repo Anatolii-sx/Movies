@@ -8,6 +8,7 @@
 import UIKit
 
 class MovieCell: UICollectionViewCell {
+    // MARK: - IB Outlets
     @IBOutlet var posterImage: UIImageView!
     
     @IBOutlet var ratingStackView: UIStackView!
@@ -15,7 +16,8 @@ class MovieCell: UICollectionViewCell {
     @IBOutlet var ratingLabel: UILabel!
     @IBOutlet var titleLabel: UILabel!
     
-    func configure(movie: Movie, cell: UICollectionViewCell) {
+    // MARK: - Public Method
+    func configure(film: Film, cell: UICollectionViewCell) {
         
         cell.layer.cornerRadius = 20
         cell.layer.shadowRadius = 6
@@ -26,19 +28,26 @@ class MovieCell: UICollectionViewCell {
         posterImage.layer.cornerRadius = 20
         ratingStackView.layer.cornerRadius = 5
         
-        DispatchQueue.main.async {
-            self.titleLabel.text = "\(movie.title ?? "")"
-            let rating = movie.ratingKinopoisk ?? ""
-            let ratingDouble = Double(rating)
-            let ratingAround = String(format: "%.01f", ratingDouble ?? 0)
-            self.ratingLabel.text = ratingAround
-        }
+        titleLabel.text = "\(film.title ?? "")"
+        
+        let rating = film.ratingKinopoisk ?? ""
+        let ratingDouble = Double(rating)
+        let ratingAround = String(format: "%.01f", ratingDouble ?? 0)
+        ratingLabel.text = ratingAround
         
         DispatchQueue.global().async {
-            guard let url = URL(string: "https:\(movie.poster ?? "")") else { return }
-            guard let imageData = try? Data(contentsOf: url) else { return }
-            DispatchQueue.main.async {
-                self.posterImage.image = UIImage(data: imageData)
+            guard let url = URL(string: "https:\(film.poster ?? "")") else { return }
+            if let imageData = try? Data(contentsOf: url) {
+                DispatchQueue.main.async {
+                    self.posterImage.image = UIImage(data: imageData)
+                    StorageManager.shared.savePosterImageData(film: film, imageData: imageData)
+                }
+            } else {
+                StorageManager.shared.getPosterImageData(film: film) { data in
+                    DispatchQueue.main.async {
+                        self.posterImage.image = UIImage(data: data)
+                    }
+                }
             }
         }
     }

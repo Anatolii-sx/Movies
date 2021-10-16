@@ -9,11 +9,13 @@ import UIKit
 
 class FavoriteMoviesTableViewController: UITableViewController {
     
-    var movies: [Movie] = []
+    // MARK: - Public Properties
+    var films: [Film] = []
     
+    // MARK: - Override Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.rowHeight = 150
+        tableView.rowHeight = 70
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -22,52 +24,74 @@ class FavoriteMoviesTableViewController: UITableViewController {
         tableView.reloadData()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.topItem?.title = "Избранное"
+        fetchCoreData()
+        tableView.reloadData()
+    }
+    
+    // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let descriptionVC = segue.destination as? DescriptionViewController else { return }
         guard let indexPath = tableView.indexPathForSelectedRow else { return }
-        let movie = movies[indexPath.row]
-        descriptionVC.movie = movie
-        descriptionVC.visibilityOfFavoriteButton = true
+        let film = films[indexPath.row]
+        descriptionVC.film = film
+        descriptionVC.isFavoriteButtonHidden = true
     }
     
     // MARK: - Table view data source
-    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        movies.count
+        films.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "favoriteCell", for: indexPath)
         var content = cell.defaultContentConfiguration()
-        let movie = movies[indexPath.row]
+        let film = films[indexPath.row]
         
-        content.text = movie.title ?? ""
+        // Set text
+        content.text = film.title ?? ""
         
-        let genres = movie.genres ?? []
+        // Set secondary text
+        let genres = film.genres ?? []
         content.secondaryText = genres.joined(separator: ", ")
         
-        DispatchQueue.global().async {
-            guard let url = URL(string: "https:\(movie.poster ?? "")") else { return }
-            guard let imageData = try? Data(contentsOf: url) else { return }
-            DispatchQueue.main.async {
-                content.image = UIImage(data: imageData)
-                content.imageProperties.cornerRadius = 3
-                cell.contentConfiguration = content
-            }
+        // Set image
+        StorageManager.shared.getPosterImageData(film: film) { data in
+            content.image = UIImage(data: data)
+            content.imageProperties.cornerRadius = 3
         }
         
         cell.accessoryType = .disclosureIndicator
         cell.contentConfiguration = content
-        
         return cell
     }
     
     // MARK: -  TableView Delegate
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            StorageManager.shared.deleteMovie(at: indexPath.row)
-            movies.remove(at: indexPath.row)
+            films[indexPath.row].isFavorite.toggle()
+            StorageManager.shared.saveContext()
+            
+            films.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
+    }
+}
+
+// MARK: - Data from Core Data
+extension FavoriteMoviesTableViewController {
+    private func fetchCoreData() {
+        StorageManager.shared.fetchData { result in
+            switch result {
+            case .success(let films):
+                var favoriteMovies = films.filter {$0.isFavorite}
+                favoriteMovies = favoriteMovies.sorted { $0.title ?? "" < $1.title ?? "" }
+                self.films = favoriteMovies
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
         }
     }
 }

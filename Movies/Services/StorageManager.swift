@@ -2,36 +2,100 @@
 //  StorageManager.swift
 //  Movies
 //
-//  Created by Анатолий Миронов on 06.10.2021.
+//  Created by Анатолий Миронов on 12.10.2021.
 //
 
-import  Foundation
+import CoreData
 
 class StorageManager {
     static let shared = StorageManager()
     
-    private let userDefaults = UserDefaults.standard
-    private let key = "movies"
+    // MARK: - Core Data stack
+    var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "CoreData")
+        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            if let error = error as NSError? {
+                fatalError("Unresolved error \(error), \(error.userInfo)")
+            }
+        })
+        return container
+    }()
+
+    private let viewContext: NSManagedObjectContext
     
-    private init() {}
-    
-    func save(movie: Movie) {
-        var movies = fetchMovies()
-        movies.append(movie)
-        guard let data = try? JSONEncoder().encode(movies) else { return }
-        userDefaults.set(data, forKey: key)
+    private init() {
+        viewContext = persistentContainer.viewContext
     }
     
-    func fetchMovies() -> [Movie] {
-        guard let data = userDefaults.data(forKey: key) else { return [] }
-        guard let movies = try? JSONDecoder().decode([Movie].self, from: data) else { return [] }
-        return movies
+    // MARK: - Public Methods
+    func fetchData(completion: (Result<[Film], Error>) -> Void) {
+        let fetchRequest = Film.fetchRequest()
+
+        do {
+            let films = try viewContext.fetch(fetchRequest)
+            completion(.success(films))
+        } catch let error {
+            completion(.failure(error))
+        }
     }
     
-    func deleteMovie(at index: Int) {
-        var movies = fetchMovies()
-        movies.remove(at: index)
-        guard let data = try? JSONEncoder().encode(movies) else { return }
-        userDefaults.set(data, forKey: key)
+    // Save data from Network Manager
+    func save(movies: [Movie]) {
+        for movie in movies {
+            guard let entityDescription = NSEntityDescription.entity(forEntityName: "Film", in: viewContext) else { return }
+            guard let film = NSManagedObject(entity: entityDescription, insertInto: viewContext) as? Film else { return }
+            
+            film.title = movie.title ?? ""
+            film.poster = movie.poster ?? ""
+            film.ratingKinopoisk = movie.ratingKinopoisk ?? ""
+            film.year = Int64(movie.year ?? 0)
+            film.descriptionOfMovie = movie.description ?? ""
+            film.genres = movie.genres ?? []
+            film.trailer = movie.trailer ?? ""
+            film.isFavorite = false
+            film.posterImageData = nil
+
+            saveContext()
+        }
+    }
+
+    // If we don't have the Internet
+    func getPosterImageData(film: Film, completion: (Data) -> Void) {
+        guard let posterImageData = film.posterImageData else { return }
+        completion(posterImageData)
+    }
+    
+    // If we have the Internet
+    func savePosterImageData(film: Film, imageData: Data) {
+        film.posterImageData = imageData
+        saveContext()
+    }
+    
+    func deleteAllFilmsExceptFavorites() {
+        fetchData { result in
+            switch result {
+            case .success(let films):
+                films.forEach { film in
+                    if film.isFavorite == false {
+                        viewContext.delete(film)
+                    }
+                }
+                saveContext()
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    // MARK: - Core Data Saving support
+    func saveContext() {
+        if viewContext.hasChanges {
+            do {
+                try viewContext.save()
+            } catch {
+                let nserror = error as NSError
+                fatalError("Unresolved error \(nserror), \(nserror.userInfo)")
+            }
+        }
     }
 }

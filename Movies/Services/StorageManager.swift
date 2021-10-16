@@ -60,14 +60,15 @@ class StorageManager {
     }
 
     // If we don't have the Internet
-    func getPosterImageData(movie: Film, completion: (Data) -> Void) {
-        guard let posterImageData = movie.posterImageData else { return }
+    func getPosterImageData(film: Film, completion: (Data) -> Void) {
+        guard let posterImageData = film.posterImageData else { return }
         completion(posterImageData)
     }
     
     // If we have the Internet
-    func savePosterImageData(movie: Film, imageData: Data) {
-        movie.posterImageData = imageData
+    func savePosterImageData(film: Film, imageData: Data) {
+        film.posterImageData = imageData
+        saveContext()
     }
     
     func deleteAllFilmsExceptFavorites() {

@@ -23,7 +23,7 @@ class DescriptionViewController: UIViewController {
     @IBOutlet var favoriteButton: UIButton!
     
     // MARK: - Public Properties
-    var movie: Film!
+    var film: Film!
     var indexPath: Int!
     var delegate: DescriptionViewControllerDelegate!
     var isFavoriteButtonHidden: Bool!
@@ -50,7 +50,7 @@ class DescriptionViewController: UIViewController {
     }
     
     @IBAction func favoriteButtonTapped() {
-        delegate.updateFavoriteStatusOfMovie(indexPath: indexPath)
+        delegate.updateFavoriteStatusOfFilm(indexPath: indexPath)
         changeTitleOfFavoriteButton()
     }
     
@@ -62,12 +62,12 @@ class DescriptionViewController: UIViewController {
     }
     
     private func setTextInLabels() {
-        titleLabel.text = movie.title ?? ""
-        yearLabel.text = "Год:  \(movie.year)"
-        ratingLabel.text = "Рейтинг:  \(movie.ratingKinopoisk ?? "")"
-        descriptionLabel.text = "Описание:  \(movie.descriptionOfMovie ?? "")"
+        titleLabel.text = film.title ?? ""
+        yearLabel.text = "Год:  \(film.year)"
+        ratingLabel.text = "Рейтинг:  \(film.ratingKinopoisk ?? "")"
+        descriptionLabel.text = "Описание:  \(film.descriptionOfMovie ?? "")"
         
-        let genres = movie.genres ?? []
+        let genres = film.genres ?? []
         genreLabel.text = "Жанр:  \(genres.joined(separator: ", "))"
     }
     
@@ -84,25 +84,25 @@ class DescriptionViewController: UIViewController {
     }
     
     private func setStartedTitleOfFavoriteButton() {
-        movie.isFavorite
+        film.isFavorite
             ? favoriteButton.setTitle("  ⛔️ Из избранного", for: .normal)
             : favoriteButton.setTitle("  ⭐️ В избранное", for: .normal)
     }
     
     private func changeTitleOfFavoriteButton() {
-        if movie.isFavorite {
+        if film.isFavorite {
             showAlert(title: "✅", message: "Фильм удалён из избранных")
             favoriteButton.setTitle("  ⭐️ В избранное", for: .normal)
         } else {
             showAlert(title: "✅", message: "Фильм добавлен в избранные")
             favoriteButton.setTitle("  ⛔️ Из избранного", for: .normal)
         }
-        movie.isFavorite.toggle()
+        film.isFavorite.toggle()
         StorageManager.shared.saveContext()
     }
     
     private func showTrailer() {
-        guard let trailer = movie.trailer else {
+        guard let trailer = film.trailer else {
             showAlert(title: "Ошибка", message: "К сожалению, видео отсутствует 😔")
             return
         }
@@ -126,7 +126,7 @@ class DescriptionViewController: UIViewController {
 // MARK: - Image from Core Data
 extension DescriptionViewController {
     func fetchImage() {
-        StorageManager.shared.getPosterImageData(movie: movie) { data in
+        StorageManager.shared.getPosterImageData(film: film) { data in
             self.posterImageView.image = UIImage(data: data)
         }
     }

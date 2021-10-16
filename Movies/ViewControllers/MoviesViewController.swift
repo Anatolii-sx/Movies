@@ -8,7 +8,7 @@
 import UIKit
 
 protocol DescriptionViewControllerDelegate {
-    func updateFavoriteStatusOfMovie(indexPath: Int)
+    func updateFavoriteStatusOfFilm(indexPath: Int)
 }
 
 class MoviesViewController: UICollectionViewController {
@@ -18,7 +18,7 @@ class MoviesViewController: UICollectionViewController {
     
     // MARK: - Private Properties
     private let refreshControl = UIRefreshControl()
-    private var movies: [Film] = []
+    private var films: [Film] = []
     
     // MARK: - Override Methods
     override func viewDidLoad() {
@@ -37,13 +37,13 @@ class MoviesViewController: UICollectionViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        movies.count
+        films.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "movieID", for: indexPath) as? MovieCell else { return UICollectionViewCell() }
-        let movie = movies[indexPath.item]
-        cell.configure(movie: movie, cell: cell)
+        let film = films[indexPath.item]
+        cell.configure(film: film, cell: cell)
         self.activityIndicator.stopAnimating()
         return cell
     }
@@ -52,7 +52,7 @@ class MoviesViewController: UICollectionViewController {
         guard let descriptionVC = segue.destination as? DescriptionViewController else { return }
         guard let indexPath = collectionView.indexPathsForSelectedItems?.first?.item else { return }
         
-        descriptionVC.movie = movies[indexPath]
+        descriptionVC.film = films[indexPath]
         descriptionVC.isFavoriteButtonHidden = false
         descriptionVC.indexPath = indexPath
         descriptionVC.delegate = self
@@ -77,7 +77,7 @@ extension MoviesViewController {
 
 // MARK: - Description View Controller Delegate
 extension MoviesViewController: DescriptionViewControllerDelegate {
-    func updateFavoriteStatusOfMovie(indexPath: Int) {
+    func updateFavoriteStatusOfFilm(indexPath: Int) {
         let number = IndexPath(item: indexPath, section: 0)
         collectionView.reloadItems(at: [number])
     }
@@ -90,7 +90,7 @@ extension MoviesViewController {
             switch result {
             case .success(let allMoviesDescriptions):
                 let downloadedMovies = allMoviesDescriptions.movies ?? []
-                self.movies = []
+                self.films = []
                 
                 StorageManager.shared.deleteAllFilmsExceptFavorites()
                 StorageManager.shared.save(movies: downloadedMovies)
@@ -99,7 +99,7 @@ extension MoviesViewController {
                 self.collectionView.reloadData()
                 self.refreshControl.endRefreshing()
             case .failure(let error):
-                self.movies = []
+                self.films = []
                 self.fetchCoreData()
                 DispatchQueue.main.async {
                     self.collectionView.reloadData()
@@ -116,8 +116,8 @@ extension MoviesViewController {
         StorageManager.shared.fetchData { result in
             switch result {
             case .success(let films):
-                let movies = films.filter {!$0.isFavorite}
-                self.movies = movies
+                let unfavoriteMovies = films.filter {!$0.isFavorite}
+                self.films = unfavoriteMovies
             case .failure(let error):
                 print(error.localizedDescription)
             }

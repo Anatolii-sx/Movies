@@ -24,7 +24,7 @@ class NetworkManager {
     static let shared = NetworkManager()
     
     var url: String {
-        "https://api.kinopoisk.cloud/movies/all/page/\(Int.random(in: 1...500))/token/\(Token.tokenTwo.rawValue)"
+        "https://api.kinopoisk.cloud/movies/all/page/\(Int.random(in: 1...500))/token/\(Token.tokenOne.rawValue)"
     }
     
     private init() {}

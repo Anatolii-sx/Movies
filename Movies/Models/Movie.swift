@@ -5,9 +5,7 @@
 //  Created by Анатолий Миронов on 24.09.2021.
 //
 
-import Foundation
-
-struct Movie: Codable {
+struct Movie: Decodable {
     let title: String?
     let poster: String?
     let ratingKinopoisk: String?
@@ -15,8 +13,6 @@ struct Movie: Codable {
     let description: String?
     let genres: [String]?
     let trailer: String?
-//    var isFavorite: Bool?
-//    let posterImageData: Data?
 }
 
 struct AllMoviesDescriptions: Decodable {

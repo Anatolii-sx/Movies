@@ -51,7 +51,7 @@ class StorageManager {
             film.year = Int64(movie.year ?? 0)
             film.descriptionOfMovie = movie.description ?? ""
             film.genres = movie.genres ?? []
-            film.trailer = movie.trailer ?? ""
+            film.trailer = movie.trailer ?? nil
             film.isFavorite = false
             film.posterImageData = nil
 

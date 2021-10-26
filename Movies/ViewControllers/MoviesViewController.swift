@@ -89,7 +89,7 @@ extension MoviesViewController {
         NetworkManager.shared.fetchMovies(url: NetworkManager.shared.url) { result in
             switch result {
             case .success(let allMoviesDescriptions):
-                let downloadedMovies = allMoviesDescriptions.movies ?? []
+                let downloadedMovies = allMoviesDescriptions
                 self.films = []
                 
                 StorageManager.shared.deleteAllFilmsExceptFavorites()

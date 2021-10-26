@@ -11,7 +11,7 @@ import SafariServices
 class DescriptionViewController: UIViewController {
 
     // MARK: - IB Outlets
-    @IBOutlet var posterImageView: UIImageView!
+    @IBOutlet weak var posterImageView: UIImageView!
     
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var yearLabel: UILabel!

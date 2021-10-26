@@ -9,7 +9,7 @@ import UIKit
 
 class MovieCell: UICollectionViewCell {
     // MARK: - IB Outlets
-    @IBOutlet var posterImage: UIImageView!
+    @IBOutlet weak var posterImage: UIImageView!
     
     @IBOutlet var ratingStackView: UIStackView!
 

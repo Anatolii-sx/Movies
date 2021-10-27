@@ -5,6 +5,10 @@
 //  Created by Анатолий Миронов on 24.09.2021.
 //
 
+struct AllMoviesDescriptions: Decodable {
+    let movies: [Movie]?
+}
+
 struct Movie: Decodable {
     let title: String?
     let poster: String?

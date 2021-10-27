@@ -29,7 +29,7 @@ class NetworkManager {
     
     private init() {}
     
-    func fetchMovies(url: String, completion: @escaping (Result<[Movie], NetworkError>) -> Void) {
+    func fetchMovies(url: String, completion: @escaping (Result<AllMoviesDescriptions, NetworkError>) -> Void) {
         guard let url = URL(string: url) else {
             completion(.failure(.invalidURL))
             return
@@ -45,7 +45,7 @@ class NetworkManager {
             do {
                 let decoder = JSONDecoder()
                 decoder.keyDecodingStrategy = .convertFromSnakeCase
-                let allMoviesDescriptions = try decoder.decode([Movie].self, from: data)
+                let allMoviesDescriptions = try decoder.decode(AllMoviesDescriptions.self, from: data)
                 
                 DispatchQueue.main.async {
                     completion(.success(allMoviesDescriptions))
